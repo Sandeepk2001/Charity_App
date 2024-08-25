@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/donation.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+<body class="body">
+
+    <form class="event-view" action="{% url 'createEvent' %}" method="post" enctype="multipart/form-data" style="display: none;">
+        {% csrf_token %}
+        <!-- <img src="https://codercredit.com/tf/gainioz/image/illus/hero-bg-thumb-2.png" alt="" style="position: absolute;z-index: 0;opacity: 0.1;width: 100%;top: 20px;"> -->
+        <div class="event-wrap">
+
+        
+        <h1 style="position: absolute;top: -25px;right: 25px;color: white;cursor: pointer;font-size: 29px;" onclick="closeEvent()"><i class="fa-solid fa-xmark"></i></h1>
+        <img src="https://cdn.pixabay.com/photo/2020/12/25/22/03/merry-christmas-5860209__340.jpg" alt="" class="post-img profile-pic" style="height: 250px;">
+
+        <!-- <p style="color: white;margin-bottom: 35px;">Create Event</p> -->
+        <div style="display: flex;justify-content: center;align-items: center;gap: 25px;margin-bottom: 25px;margin-top: -10px;position: absolute;top: 200px;right: 25px;">
+            <!-- <img src="https://codercredit.com/tf/gainioz/image/featured/featuredThumb4.jpg" alt="" style="width: 250px;height: 120px;border-radius: 10px;object-fit: cover;"> -->
+            <h3 style="position: relative;width: 120px;padding: 8px;background-color: #a47836;border-radius: 0px;color: white;font-size: 15px;text-align: center;font-weight: 500;cursor: pointer;"> <input type="file" name="image" id="file" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;opacity: 0;" class="file" required onchange="setProfilePic(this)"> Choose Event Image</h3>
+        </div>
+
+        <div class="group" style="margin-top: 25px;">
+            <input type="text" name="title" id="" required placeholder="Event Title*">
+            <input type="text" name="hashtag" id="" required placeholder="Hashtag*">
+        </div>
+
+        <div class="group single">
+            <input type="text" name="description" id="" required placeholder="Event Description*">
+        </div>
+        <div class="group single" >
+            <input type="number" name="goal" id="" required placeholder="Amount to be raised*" min="1">
+        </div>
+
+        <div class="group">
+            <input type="text" name="phone" id="" required placeholder="Phone Number*">
+            <input type="text" name="address" id="" required placeholder="Address*">
+        </div>
+
+        <div class="group">
+            <input type="text" name="beneficiary" id="" required placeholder="Beneficiary name*">
+            <input type="text" name="accAddress" id="" required placeholder="Account address*">
+        </div>
+        
+
+        <button type="submit" class="donate-btn">Create Event</button>
+        </div>
+    </form>
+
+    <div class="container">
+        <div class="navbar" style="z-index: 150;">
+            <img src="{% static 'images/logo_1.png' %}" alt="" style="width: 130px;">
+
+            <div class="link">
+                <a href="{% url 'homepage' %}">HOME</a>
+                <!-- <a href="">ABOUT</a> -->
+                <a href="{% url 'donation' %}">DONATIONS</a>
+                <!-- <a href="{% url 'blog' %}">BLOG</a> -->
+                
+                <!-- <a href="">PAGES</a> -->
+                <!-- <a href="">CONTACTS</a> -->
+            </div>
+            <div class="icons">
+                <h2 style="opacity: 0;pointer-events: none;"><ion-icon name="bag-handle-outline"></ion-icon></h2>
+                <h2 style="opacity: 0;pointer-events: none;"><ion-icon name="search-outline"></ion-icon></h2>
+            </div>
+            {% if request.user.is_authenticated and profile.is_an_organization %}
+            <!-- <button style="background-color: #e8e8e8;color: black;" >Login</button> -->
+           
+            <a onclick="showEvent()"><button style="background-color: #429c51;color: rgb(255, 255, 255);">CREATE EVENT</button></a>
+            {% else %}
+            <a href="{% url 'logout' %}"><button style="background-color: #e8e8e8;color: black;">Logout</button></a>
+
+            {% endif %}
+           
+        </div>
+        <div class="banner">
+            <img src="{% static 'images/pagebreadcumbShapeBottom.svg' %}" class="img3" alt=""> 
+            <div class="banner-image1">
+                <img src="{% static 'images/pageBreadcumbBg1.jpg' %}" class="img1" alt="">
+                <div class="banner-details">
+                    <h1>DONATION LISTING</h1>
+                    <h3><a href="index.html">Home ></a>&nbsp&nbsp<a href="donation.html" style="color: #ff9900;">Donation</a></h3>
+                </div>
+            </div> 
+            <img src="{% static 'images/pagebreadcumbShapeTop.svg' %}" class="img2" alt="">  
+        </div>
+        <div class="section1">
+            <div class="last-heading" style="margin-top: -150px;">
+                <div class="about">
+                    <h6><ion-icon name="heart"></ion-icon></h6>
+                    <h5>DONATION LISTING</h5>
+                    <h6 style="margin-right: 0px;margin-left: 10px;"><ion-icon name="heart"></ion-icon></h6>
+                </div>
+                <h1 style="text-transform: uppercase;">Hosted Events</h1>
+            </div>
+            <!-- <div class="section1-nav">
+                <a href="" style="color: black;background-color: white; width: 60px;height: 35px; border: 2px solid rgb(215, 215, 215);display: flex;justify-content: center;align-items: center;border-radius: 30px;">ALL</a>
+                <a href="">EDUCATION</a>
+                <a href="">HEALTH</a>
+                <a href="">MEDICAL</a>
+                <a href="">HOME</a>
+                <a href="">KIDS AFRICA</a>
+                <a href="">FOOD</a>
+            </div> -->
+        </div>
+        <div class="second-section" style="margin-top: -200px;">
+            {% for event in events %}
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape1.png' %}" class="img4" alt="">
+                        <h5>#{{event.hashtag}}</h5>
+                    </div>
+                    <img src="{{event.image.url}}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <a href="{% url 'eventView' pk=event.pk %}" style="color: black;text-decoration: none;padding-left: 15px;"><h1>{{event.title}}</h1></a>
+                    <p style="width: 95%;height: 50px;overflow: hidden;padding-left: 15px;">{{event.description}}</p>
+                    <div class="range-group" style="padding-left: 15px;">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options" style="padding-left: 15px;">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>₹{{event.goal}}</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>₹{{event.raised}}</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>₹{{event.toGo}}</h3>
+                        </div>
+                    </div>  
+                </div>
+            </div> 
+            {% endfor %}  
+            <!-- <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape2.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>YOU CAN GIVE KIDS IN INDIA CLEAN WATER</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div> 
+            </div>       
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape2.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>LIFESKILLS FOR CHILDREN IN SOUTH AFRICA</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div> 
+            </div>            -->
+        </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>  
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script>
+        function closeEvent(){
+            document.querySelector('.event-view').style.display = "none"
+            document.querySelector('.body').style.overflowY = "scroll"
+        }
+        function showEvent(){
+            document.querySelector('.event-view').style.display = "flex"
+            document.querySelector('.body').style.overflowY = "hidden"
+        }
+        function setProfilePic(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    // document.querySelector('.profile-pic').style.display = "flex"
+                    // document.querySelector('.profile-pic-name').textContent = input.value.replace("C:\\fakepath\\","")
+                    $('.profile-pic')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+
+            // document.querySelector('.chooseImg').style.backgroundColor ="#06af50"
+            // document.querySelector('.chooseImg').style.color ="#fff"
+            // document.querySelector('.chooseImg').style.border ="2px soild #06af50"
+        }
+    </script>
+
+</body>
+</html>

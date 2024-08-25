@@ -1,0 +1,398 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/donation.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+<body id="style-2" style="overflow: hidden !important; ">
+
+    <form class="create-event" action="{% url 'createEvent' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1 style="position: absolute;top: 25px;right: 25px;color: white;cursor: pointer;font-size: 29px;" onclick="closeEvent()"><i class="fa-solid fa-xmark"></i></h1>
+        <img src="{% static 'images/logo_1.png' %}" alt="">
+        <p style="color: white;margin-bottom: 35px;">Create Event</p>
+        <div style="display: flex;justify-content: center;align-items: center;gap: 25px;margin-bottom: 25px;margin-top: -10px;">
+            <!-- <img src="https://codercredit.com/tf/gainioz/image/featured/featuredThumb4.jpg" alt="" style="width: 250px;height: 120px;border-radius: 10px;object-fit: cover;"> -->
+            <h3 style="position: relative;width: 120px;padding: 8px;background-color: #a47836;border-radius: 0px;color: white;font-size: 15px;text-align: center;font-weight: 500;cursor: pointer;"> <input type="file" name="image" id="file" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;opacity: 0;" class="file" required> Choose Event Image</h3>
+        </div>
+        <div class="group">
+            <input type="text" name="title" id="" required placeholder="Event Title*">
+            <input type="text" name="hashtag" id="" required placeholder="Hashtag*">
+        </div>
+
+        <div class="group single">
+            <input type="text" name="description" id="" required placeholder="Event Description*">
+        </div>
+        <div class="group single" >
+            <input type="number" name="goal" id="" required placeholder="Amount to be raised*" min="1">
+        </div>
+
+        <div class="group">
+            <input type="text" name="phone" id="" required placeholder="Phone Number*">
+            <input type="text" name="address" id="" required placeholder="Address*">
+        </div>
+
+        
+
+        <button type="submit">Create Event</button>
+
+    </form>
+
+    <div class="event-view" style="display: none;">
+        <h2 style="width: 50px;height: 50px;background-color: #262626;color: white;display: flex;justify-content: center;align-items: center;position: fixed;top: 25px;left: 25px;cursor: pointer;" onclick="back()"><i class="fa-solid fa-arrow-left"></i></h2>
+        <div class="event-wrap">
+            <img src="{% static 'images/featuredCateShape1.png' %}" alt="" style="position: absolute;top: 0;left: 0;z-index: 10;width: 190px;">
+            <h4 style="position: absolute;top: 10px;left: 20px;z-index: 10;z-index: 150;color: white;font-size: 22px;">#LIFE</h4>
+            <div style="position: relative;width: 600px;">
+                <img src="{{event.image.url}}" alt="" class="post-img">
+                <div class="det" style="position: absolute;bottom: 0;width: 100%;height: 50px;background-color: rgb(28, 28, 28);display: flex;justify-content: space-around;align-items: center;color: white;">
+                    <h3 style="font-size: 14px;font-weight:400;text-transform: uppercase;">Hosted By : {{event.user.username}}</h3>
+                    <h3 style="font-size: 14px;font-weight:400;text-transform: uppercase;">Hosted on : {{event.date}}</h3>
+                </div>
+            </div>
+            <img src="https://codercredit.com/tf/gainioz/image/illus/hero-bg-thumb-2.png" alt="" style="position: absolute;z-index: 0;opacity: 0.2;width: 100%;top: 300px;">
+            <h1>{{event.title}}</h1>
+            <p>{{event.description}}</p>
+             
+               
+                
+                      
+                    <div class="options" style="margin-top: 10px;">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>₹{{event.goal}}</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>₹{{event.raised}}</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>₹{{event.toGo}}</h3>
+                        </div>
+                    </div>  
+                
+            {% if selfPost == 0 %}
+            <div class="input">
+                <input type="number" placeholder="Donation amount in Rs" class="amount">
+                <button onclick="donate('{{event.user.username}}','{{event.pk}}')">Donate now</button>
+            </div>
+            
+            {% if donation %}
+            <button style="width: 95%;padding: 10px;background-color: #2d9a63;color: rgb(255, 255, 255);border: 2px solid #2d9a63;outline: none;font-size: 17px;margin-top: 20px;cursor: pointer;">Track My Donation</button>
+
+            {% endif %}
+            <h3 style="font-weight: 500;margin-top: 15px;text-align: center;display: none;" class="thanks">🎊 THANKYOU FOR YOUR DONATION 🎊</h3>
+            {% else %}
+
+            <button style="width: 95%;padding: 10px;background-color: #2d9a63;color: rgb(255, 255, 255);border: 2px solid #2d9a63;outline: none;font-size: 17px;margin-top: 20px;cursor: pointer;" onclick="showDonations()">SHOW ALL DONATIONS</button>
+
+
+            {% endif %}
+
+            
+
+        </div>
+    </div>
+
+    <div class="donation-details" style="display: flex;">
+        <div class="donations" style="position: relative;">
+            <img src="https://codercredit.com/tf/gainioz/image/illus/hero-bg-thumb-2.png" alt="" style="position: absolute;z-index: 0;opacity: 0.2;width: 100%;top: 0px;height: 100%;object-fit: cover;">
+
+            <h3 style="font-weight: 500;margin-top: 15px;text-align: center;display: flex;margin-top: 8px;margin-top: 25px;" >DONATIONS BY VARIOUS PEOPLE</h3>
+            <p style="margin-bottom: 35px;opacity: 0.7;">Listed below are the donations made by various people</p>
+            <h2 style="width: 40px;height: 40px;background-color: #262626;color: white;display: flex;justify-content: center;align-items: center;position: absolute;top: 25px;left: 25px;cursor: pointer;" onclick="back()"><i class="fa-solid fa-arrow-left"></i></h2>
+            <table style="position: relative;z-index: 1;">
+                
+                <tr>
+                   
+                    <th style="font-weight: 600;font-size: 15px;width: 20%;">User</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 20%;">Amount</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 40%;">Transaction Date</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 40%;">Donation</th>
+                    <!-- <th style="font-weight: 600;font-size: 15px;width: 30%;">Transcation</th> -->
+
+                </tr>
+                
+                {% for amount in amounts %}
+                {% if not amount.sent %}
+                <tr>
+                    <td style="display: flex;justify-content: flex-start;align-items: flex-start;gap: 15px;padding-left: 25px;width: 200px;">
+                        <img src="{{amount.image}}" alt="" style="width: 30px;height: 30px;border-radius: 100px;object-fit: cover;">
+                        <div style="text-align: left;">
+                            <h4 style="font-weight: 500;font-size: 14px;">{{amount.username}}</h4>
+                            <!-- <p style="font-size: 13px;font-weight: 500;">Phone Number : 754858689</p> -->
+                        </div>
+                    </td>
+                    <td style="text-align: center;font-size: 14px;" class="amt">{{amount.amount}}</td>
+                    <td style="text-align: center;font-size: 14px;">{{amount.date}}</td>
+                    <td><button style="padding: 7px;background-color: #2d9a63;color: white;border: none;outline: none;border-radius: 5px;cursor: pointer;" onclick="sendDonation('{{amount.pk}}',this,this.parentNode.parentNode,'{{amount.eventPk}}')">Send Donation</button></td>
+                    
+
+                    <!-- <td style="font-weight: 400;"><button style="padding: 10px;background-color: #2d919a;color: white;font-weight: 400;width: 120px;border: none;outline: none;">Send Amount</button></td> -->
+                </tr>
+                {% endif %}
+
+                {% endfor %}
+                
+                
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="navbar">
+            <img src="{% static 'images/logo_1.svg' %}" alt="">
+            <div class="link">
+                <a href="index.html">HOME</a>
+                <a href="about.html">ABOUT</a>
+                <a href="donation.html">DONATIONS</a>
+                <a href="">BLOG</a>
+                <a href="">PAGES</a>
+                <a href="">CONTACTS</a>
+            </div>
+            
+            <a href="{% url 'logout' %}"><button style="background-color: #e8e8e8;color: black;">Logout</button></a>
+
+        </div>
+        <div class="banner">
+            <img src="{% static 'images/pagebreadcumbShapeBottom.svg' %}" class="img3" alt=""> 
+            <div class="banner-image1">
+                <img src="{% static 'images/pageBreadcumbBg1.jpg' %}" class="img1" alt="">
+                <div class="banner-details">
+                    <h1>DONATION LISTING</h1>
+                    <h3><a href="index.html">Home ></a>&nbsp&nbsp<a href="donation.html" style="color: #ff9900;">Donation</a></h3>
+                </div>
+            </div> 
+            <img src="{% static 'images/pagebreadcumbShapeTop.svg' %}" class="img2" alt="">  
+        </div>
+        <div class="section1">
+            <div class="last-heading">
+                <div class="about">
+                    <h6><ion-icon name="heart"></ion-icon></h6>
+                    <h5>DONATION LISTING</h5>
+                    <h6 style="margin-right: 0px;margin-left: 10px;"><ion-icon name="heart"></ion-icon></h6>
+                </div>
+                <h1>INTRODUCE OUR CAMPAINS</h1>
+            </div>
+            <div class="section1-nav">
+                <a href="" style="color: black;background-color: white; width: 60px;height: 35px; border: 2px solid rgb(215, 215, 215);display: flex;justify-content: center;align-items: center;border-radius: 30px;">ALL</a>
+                <a href="">EDUCATION</a>
+                <a href="">HEALTH</a>
+                <a href="">MEDICAL</a>
+                <a href="">HOME</a>
+                <a href="">KIDS AFRICA</a>
+                <a href="">FOOD</a>
+            </div>
+        </div>
+        <div class="second-section" style="margin-top: -60px;">
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape1.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>YOU CAN GIVE POOR IN INDIA...CLEAN WATER & FOOD</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div>
+            </div>   
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape2.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>YOU CAN GIVE KIDS IN INDIA CLEAN WATER</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div> 
+            </div>       
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape2.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>LIFESKILLS FOR CHILDREN IN SOUTH AFRICA</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div> 
+            </div>           
+        </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>  
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script>
+        function closeEvent(){
+            document.querySelector('.create-event').style.display = "none"
+        }
+        function showEvent(){
+            document.querySelector('.create-event').style.display = "flex"
+        }
+
+        function back(){
+            history.back()
+        }
+
+        function donate(username,pk){
+      
+        var data = new FormData()
+
+        data.append("username", username)
+        // data.append("password", document.querySelector('.password').value)
+        data.append("amount", document.querySelector('.amount').value)
+        data.append("pk", pk)
+
+
+        data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+        if(document.querySelector('.amount').value == "")
+        {
+            alert("Please enter an amount")
+        }
+        else if(document.querySelector('.amount').value < 10){
+            alert("Amount should be greate than 10Rs")
+        }
+
+        
+        else{
+        $.ajax({
+
+            method:"POST",
+            url:'/donate/',
+            processData:false,
+            contentType:false,
+            // MimeType:"multipart/form-data",
+            data:data,
+            success:function(res){
+                
+                document.querySelector('.input').style.display = "none"
+                document.querySelector('.thanks').style.display = "flex"
+
+            }
+        })
+    }
+  }
+
+    function backToView(){
+        document.querySelector('.event-view').style.display = "flex"
+        document.querySelector('.donation-details').style.display = "none"
+    }
+
+    function showDonations(){
+        document.querySelector('.event-view').style.display = "none"
+        document.querySelector('.donation-details').style.display = "flex"
+    }
+
+    function sendDonation(pk,element1,element,eventPk){
+        var data = new FormData()
+
+        data.append("pk", pk)
+        data.append("amount", element.querySelector('.amt').innerText)
+        // data.append("password", document.querySelector('.password').value)
+        data.append("event-pk", eventPk)
+
+        data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+        
+
+        $.ajax({
+
+            method:"POST",
+            url:'/sendDonation/',
+            processData:false,
+            contentType:false,
+            // MimeType:"multipart/form-data",
+            data:data,
+            success:function(res){
+                
+                element1.innerText = "Sent"
+                element1.style.pointerEvents = "none"
+            }
+        })
+    
+
+}
+
+    </script>
+
+</body>
+</html>

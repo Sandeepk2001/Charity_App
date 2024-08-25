@@ -1,0 +1,373 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/donation.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+<body id="style-2" style="overflow: hidden !important; ">
+
+    <form class="create-event" action="{% url 'createEvent' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1 style="position: absolute;top: 25px;right: 25px;color: white;cursor: pointer;font-size: 29px;" onclick="closeEvent()"><i class="fa-solid fa-xmark"></i></h1>
+        <img src="{% static 'images/logo_1.png' %}" alt="">
+        <p style="color: white;margin-bottom: 35px;">Create Event</p>
+        <div style="display: flex;justify-content: center;align-items: center;gap: 25px;margin-bottom: 25px;margin-top: -10px;">
+            <!-- <img src="https://codercredit.com/tf/gainioz/image/featured/featuredThumb4.jpg" alt="" style="width: 250px;height: 120px;border-radius: 10px;object-fit: cover;"> -->
+            <h3 style="position: relative;width: 120px;padding: 8px;background-color: #a47836;border-radius: 0px;color: white;font-size: 15px;text-align: center;font-weight: 500;cursor: pointer;"> <input type="file" name="image" id="file" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;opacity: 0;" class="file" required> Choose Event Image</h3>
+        </div>
+        <div class="group">
+            <input type="text" name="title" id="" required placeholder="Event Title*">
+            <input type="text" name="hashtag" id="" required placeholder="Hashtag*">
+        </div>
+
+        <div class="group single">
+            <input type="text" name="description" id="" required placeholder="Event Description*">
+        </div>
+        <div class="group single" >
+            <input type="number" name="goal" id="" required placeholder="Amount to be raised*" min="1">
+        </div>
+
+        <div class="group">
+            <input type="text" name="phone" id="" required placeholder="Phone Number*">
+            <input type="text" name="address" id="" required placeholder="Address*">
+        </div>
+
+        
+
+        <button type="submit">Create Event</button>
+
+    </form>
+
+    <div class="event-view" style="display: none;">
+        <h2 style="width: 50px;height: 50px;background-color: #262626;color: white;display: flex;justify-content: center;align-items: center;position: fixed;top: 25px;left: 25px;cursor: pointer;" onclick="back()"><i class="fa-solid fa-arrow-left"></i></h2>
+        <div class="event-wrap">
+            <img src="{% static 'images/featuredCateShape1.png' %}" alt="" style="position: absolute;top: 0;left: 0;z-index: 10;width: 190px;">
+            <h4 style="position: absolute;top: 10px;left: 20px;z-index: 10;z-index: 150;color: white;font-size: 22px;">#LIFE</h4>
+            <div style="position: relative;width: 600px;">
+                <img src="{{event.image.url}}" alt="" class="post-img">
+                <div class="det" style="position: absolute;bottom: 0;width: 100%;height: 50px;background-color: rgb(28, 28, 28);display: flex;justify-content: space-around;align-items: center;color: white;">
+                    <h3 style="font-size: 14px;font-weight:400;text-transform: uppercase;">Hosted By : {{event.user.username}}</h3>
+                    <h3 style="font-size: 14px;font-weight:400;text-transform: uppercase;">Hosted on : {{event.date}}</h3>
+                </div>
+            </div>
+            <img src="https://codercredit.com/tf/gainioz/image/illus/hero-bg-thumb-2.png" alt="" style="position: absolute;z-index: 0;opacity: 0.2;width: 100%;top: 300px;">
+            <h1>{{event.title}}</h1>
+            <p>{{event.description}}</p>
+             
+               
+                
+                      
+                    <div class="options" style="margin-top: 10px;">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>₹{{event.goal}}</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>₹{{event.raised}}</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>₹{{event.toGo}}</h3>
+                        </div>
+                    </div>  
+                
+            {% if selfPost == 0 %}
+            <div class="input">
+                <input type="number" placeholder="Donation amount in Rs" class="amount">
+                <button onclick="donate('{{event.user.username}}','{{event.pk}}')">Donate now</button>
+            </div>
+            
+            {% if donation %}
+            <button style="width: 95%;padding: 10px;background-color: #2d9a63;color: rgb(255, 255, 255);border: 2px solid #2d9a63;outline: none;font-size: 17px;margin-top: 20px;cursor: pointer;">Track My Donation</button>
+
+            {% endif %}
+            <h3 style="font-weight: 500;margin-top: 15px;text-align: center;display: none;" class="thanks">🎊 THANKYOU FOR YOUR DONATION 🎊</h3>
+            {% else %}
+
+            <button style="width: 95%;padding: 10px;background-color: #2d9a63;color: rgb(255, 255, 255);border: 2px solid #2d9a63;outline: none;font-size: 17px;margin-top: 20px;cursor: pointer;" onclick="showDonations()">SHOW ALL DONATIONS</button>
+
+
+            {% endif %}
+
+            
+
+        </div>
+    </div>
+
+    <div class="donation-details" style="display: flex;">
+        <div class="donations" style="position: relative;">
+            <img src="https://codercredit.com/tf/gainioz/image/illus/hero-bg-thumb-2.png" alt="" style="position: absolute;z-index: 0;opacity: 0.2;width: 100%;top: 0px;height: 100%;object-fit: cover;">
+
+            <h3 style="font-weight: 500;margin-top: 15px;text-align: center;display: flex;margin-top: 8px;margin-top: 25px;" >DONATIONS BY YOU TO THIS EVENT</h3>
+            <p style="margin-bottom: 35px;opacity: 0.7;">Listed below are the donations you made to this event</p>
+            <h2 style="width: 40px;height: 40px;background-color: #262626;color: white;display: flex;justify-content: center;align-items: center;position: absolute;top: 25px;left: 25px;cursor: pointer;" onclick="back()"><i class="fa-solid fa-arrow-left"></i></h2>
+            {% for donations in amounts %}
+            
+           <h3 style="font-weight: 500;margin-bottom: 15px;">Donation Made</h3>
+            <table style="position: relative;z-index: 1;margin-bottom: 25px;">
+                
+                <tr>
+                   
+                    <th style="font-weight: 600;font-size: 15px;width: 20%;">From</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 30%;">To</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 30%;">Account Address</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 30%;">Amount</th>
+                    <!-- <th style="font-weight: 600;font-size: 15px;width: 30%;">Transcation</th> -->
+
+                </tr>
+                {% for donation in donations %}
+                <tr>
+                    
+                    <td style="display: flex;justify-content: flex-start;align-items: flex-start;gap: 15px;padding-left: 25px;width: 250px;">
+                        <img src="data:image/png;base64,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" alt="" style="width: 30px;height: 30px;border-radius: 100px;object-fit: cover;">
+                        <div style="text-align: left;">
+                            <h4 style="font-weight: 500;font-size: 14px;">{{donation.from_user}}</h4>
+                            <!-- <p style="font-size: 13px;font-weight: 500;">Phone Number : 754858689</p> -->
+                        </div>
+                    </td>
+                    <td style="text-align: center;font-size: 14px;">{{donation.to_user}}</td>
+                    <td style="text-align: center;font-size: 14px;">{{donation.address}}</td>
+                    <td style="text-align: center;font-size: 14px;">{{donation.amount}}</td>
+                    
+
+                    <!-- <td style="font-weight: 400;"><button style="padding: 10px;background-color: #2d919a;color: white;font-weight: 400;width: 120px;border: none;outline: none;">Send Amount</button></td> -->
+                </tr>
+                {% endfor %}
+
+                
+
+                
+                
+            </table>
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="navbar">
+            <img src="{% static 'images/logo_1.svg' %}" alt="">
+            <div class="link">
+                <a href="index.html">HOME</a>
+                <a href="about.html">ABOUT</a>
+                <a href="donation.html">DONATIONS</a>
+                <a href="">BLOG</a>
+                <a href="">PAGES</a>
+                <a href="">CONTACTS</a>
+            </div>
+            
+            <a href="{% url 'logout' %}"><button style="background-color: #e8e8e8;color: black;">Logout</button></a>
+
+        </div>
+        <div class="banner">
+            <img src="{% static 'images/pagebreadcumbShapeBottom.svg' %}" class="img3" alt=""> 
+            <div class="banner-image1">
+                <img src="{% static 'images/pageBreadcumbBg1.jpg' %}" class="img1" alt="">
+                <div class="banner-details">
+                    <h1>DONATION LISTING</h1>
+                    <h3><a href="index.html">Home ></a>&nbsp&nbsp<a href="donation.html" style="color: #ff9900;">Donation</a></h3>
+                </div>
+            </div> 
+            <img src="{% static 'images/pagebreadcumbShapeTop.svg' %}" class="img2" alt="">  
+        </div>
+        <div class="section1">
+            <div class="last-heading">
+                <div class="about">
+                    <h6><ion-icon name="heart"></ion-icon></h6>
+                    <h5>DONATION LISTING</h5>
+                    <h6 style="margin-right: 0px;margin-left: 10px;"><ion-icon name="heart"></ion-icon></h6>
+                </div>
+                <h1>INTRODUCE OUR CAMPAINS</h1>
+            </div>
+            <div class="section1-nav">
+                <a href="" style="color: black;background-color: white; width: 60px;height: 35px; border: 2px solid rgb(215, 215, 215);display: flex;justify-content: center;align-items: center;border-radius: 30px;">ALL</a>
+                <a href="">EDUCATION</a>
+                <a href="">HEALTH</a>
+                <a href="">MEDICAL</a>
+                <a href="">HOME</a>
+                <a href="">KIDS AFRICA</a>
+                <a href="">FOOD</a>
+            </div>
+        </div>
+        <div class="second-section" style="margin-top: -60px;">
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape1.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>YOU CAN GIVE POOR IN INDIA...CLEAN WATER & FOOD</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div>
+            </div>   
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape2.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>YOU CAN GIVE KIDS IN INDIA CLEAN WATER</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div> 
+            </div>       
+            <div class="section2">  
+                <div class="big-image">
+                    <div class="img-small-group">
+                        <img src="{% static 'images/featuredCateShape2.png' %}" class="img4" alt="">
+                        <h5>#LIFE</h5>
+                    </div>
+                    <img src="{% static 'images/featuredThumb4.jpg' %}" class="image3" alt="">
+                </div>
+                <div class="card2">
+                    <h1>LIFESKILLS FOR CHILDREN IN SOUTH AFRICA</h1>
+                    <p>We help local nonprofits access the funding, training, and support they need to become more</p>
+                    <div class="range-group">
+                        <div class="range">
+                            <div class="range-small"></div>
+                        </div>
+                        <div class="circle">
+                            <div class="small-circle"></div>
+                        </div>
+                    </div>  
+                    <div class="options">
+                        <div class="opt1">
+                            <h5>OUR GOAL</h5>
+                            <h3>$28.0000</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>RAISED</h5>
+                            <h3>$9,9098</h3>
+                        </div>
+                        <div class="opt1">
+                            <h5>TO GO</h5>
+                            <h3>$34,000</h3>
+                        </div>
+                    </div>  
+                </div> 
+            </div>           
+        </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>  
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script>
+        function closeEvent(){
+            document.querySelector('.create-event').style.display = "none"
+        }
+        function showEvent(){
+            document.querySelector('.create-event').style.display = "flex"
+        }
+
+        function back(){
+            history.back()
+        }
+
+        function donate(username,pk){
+      
+        var data = new FormData()
+
+        data.append("username", username)
+        // data.append("password", document.querySelector('.password').value)
+        data.append("amount", document.querySelector('.amount').value)
+        data.append("pk", pk)
+
+
+        data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+        if(document.querySelector('.amount').value == "")
+        {
+            alert("Please enter an amount")
+        }
+        else if(document.querySelector('.amount').value < 10){
+            alert("Amount should be greate than 10Rs")
+        }
+
+        
+        else{
+        $.ajax({
+
+            method:"POST",
+            url:'/donate/',
+            processData:false,
+            contentType:false,
+            // MimeType:"multipart/form-data",
+            data:data,
+            success:function(res){
+                
+                document.querySelector('.input').style.display = "none"
+                document.querySelector('.thanks').style.display = "flex"
+
+            }
+        })
+    }
+  }
+
+    function backToView(){
+        document.querySelector('.event-view').style.display = "flex"
+        document.querySelector('.donation-details').style.display = "none"
+    }
+
+    function showDonations(){
+        document.querySelector('.event-view').style.display = "none"
+        document.querySelector('.donation-details').style.display = "flex"
+    }
+    </script>
+
+</body>
+</html>

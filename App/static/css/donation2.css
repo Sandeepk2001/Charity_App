@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Oswald, sans-serif;
+    overflow-x: hidden;
+}
+
+.link a {
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    color: black;
+}
+
+.link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    background-color: white;
+
+}
+
+.icons h2 {
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    box-shadow: 0 4px 8px 0 rgba(165, 165, 165, 0.2), 0 6px 20px 0 rgba(193, 192, 192, 0.19);
+}
+
+.icons h2:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.navbar button {
+    width: 150px;
+    height: 40px;
+    font-size: 15px;
+    color: white;
+    background-color: rgb(17, 143, 17);
+    border: none;
+}
+
+.navbar button:hover {
+    background-color: rgb(255, 136, 0);
+    cursor: pointer;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 110px;
+    width: 100%;
+    height: 100px;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    box-shadow: 0px 7px 50px 0px rgba(157, 156, 156, 0.219);
+
+}
+/* ////////////////////////navbar///////////////////////////////// */
+.banner-details h1{
+    font-size: 80px;
+    font-weight: 500;
+    color: white;
+}
+.banner-details a{
+    font-size: 25px;
+    font-weight: 500;
+    text-decoration: none;
+    color: white;
+}
+.banner-details{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+}
+.img1{
+    filter: brightness(0.3);
+}
+.img2{
+    width: 100%;
+    filter: brightness(0.0);
+}
+.img3{
+    width: 100%;
+    filter: brightness(0.0);
+}
+.banner-image1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.banner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 110px;
+}
+/* ////////////////////////////////////////////banner////////////////////////////// */

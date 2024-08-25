@@ -1,0 +1,528 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+<body id="style-2">
+    <div class="login-wrapper">
+        <div class="main" style="width: 250px;">
+            <h2 style="position: absolute;top: 20px;right: 20px;color: rgb(17, 17, 17);z-index: 100;font-size: 15px;" onclick="closeLogin()"><i class="fa-solid fa-x" style="color: rgb(18, 18, 18);"></i></h2>
+            <img src="{% static 'images/logo_1.png' %}" alt="" style="width: 130px;transform: rotate(0deg); margin-bottom: 28px;margin-top: 25px;">
+            <h1 style="color: rgb(19, 19, 19);font-size: 18px;">Signin</h1>
+            <p style="color: rgb(94, 94, 94);">Login into your account now</p>
+    
+            <div class="inputs">
+                <input type="text" placeholder="username" class="userName" style="margin-bottom: 10px;"><br>
+                <input type="password" placeholder="password" class="password"><br>
+            </div>
+            <p style="display: none;justify-content: center;align-items: center;width: 100%;margin-top: 25px;opacity: 1;margin-bottom: 10px;color: #ea4848;" class="error">Invalid login credentials</p>
+
+            <button onclick="sendData()">Login into my account</button>
+            <h4 style="font-weight: 500;">OR</h4>
+            <button onclick="showSignup()" style="background-color: #e8e8e8;color: rgb(26, 26, 26);">create a new account</button>
+            <button onclick="showSignupCharity()" style="background-color: #e8e8e8;color: rgb(26, 26, 26);">Charity organization signup</button>
+
+        </div>
+    </div>
+
+    <div class="signup-wrapper">
+        <div class="main" style="width: 250px;">
+            <h2 style="position: absolute;top: 20px;right: 20px;color: rgb(0, 0, 0);font-size: 15px;" onclick="closeSignup()"><i class="fa-solid fa-x" style="color: rgb(32, 32, 32);"></i></ion-icon></h2>
+            <img src="{% static 'images/logo_1.png' %}" alt="" style="width: 130px;transform: rotate(0deg); margin-bottom: 28px;margin-top: 25px;">
+            
+            <!-- <h1  style="color: black;font-size: 18px;color: rgb(31, 31, 31);">Signup</h1> -->
+            <p style="color: rgb(50, 50, 50);">Create your new account now</p>
+            <div style="display: flex;justify-content: center;align-items: center;gap: 25px;margin-bottom: 15px;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaUTp3j_LpF5r5_gNdvW0g7p057ExdcHWbUQ&usqp=CAU" alt="" style="width: 60px;height: 60px;border-radius: 100px;object-fit: cover;" class="profile-pic">
+                <h3 style="position: relative;width: 120px;padding: 8px;background-color: #a47836;border-radius: 8px;color: white;font-size: 15px;text-align: center;font-weight: 500;"> <input type="file" name="" id="file" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;opacity: 0;" class="file" required onchange="setProfilePic(this)"> Choose Image</h3>
+            </div>
+            <div class="inputs inps">
+                <input type="text" placeholder="username" class="username1"><br>
+                <input type="email" placeholder="email address" class="email1"><br>
+                <input type="number" placeholder="phone number" class="phone">
+                <input type="text" placeholder="Address" class="address"><br>
+
+                <input type="password" placeholder="password" class="password1"><br>
+            </div>
+            <p style="margin-top: -7px;color: rgb(235, 66, 66);opacity: 1;width: 100%;text-align: center;display: none;font-size: 15px;justify-content: center;align-items: center;margin-bottom: 15px;" class="err2">Username already exists</p>
+
+            <button onclick="checkSignup()">Create a new account account</button>
+        </div>
+    </div>
+
+    <div class="signup-wrapper-charity">
+        <div class="main" style="width: 250px;">
+            <h2 style="position: absolute;top: 20px;right: 20px;color: rgb(0, 0, 0);font-size: 15px;" onclick="closeSignupCharity()"><i class="fa-solid fa-x" style="color: rgb(32, 32, 32);"></i></ion-icon></h2>
+            <img src="{% static 'images/logo_1.png' %}" alt="" style="width: 130px;transform: rotate(0deg); margin-bottom: 28px;margin-top: 25px;">
+            
+            <!-- <h1  style="color: black;font-size: 18px;color: rgb(31, 31, 31);">Signup</h1> -->
+            <p style="color: rgb(50, 50, 50);">Create your new account now</p>
+            <div style="display: flex;justify-content: center;align-items: center;gap: 25px;margin-bottom: 15px;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaUTp3j_LpF5r5_gNdvW0g7p057ExdcHWbUQ&usqp=CAU" alt="" style="width: 60px;height: 60px;border-radius: 100px;object-fit: cover;" class="profile-pic2">
+                <h3 style="position: relative;width: 120px;padding: 8px;background-color: #a47836;border-radius: 8px;color: white;font-size: 15px;text-align: center;font-weight: 500;"> <input type="file" name="" id="file1" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;opacity: 0;" class="file1" required onchange="setProfilePic2(this)"> Choose Image</h3>
+            </div>
+            <div class="inputs inps">
+                <input type="text" placeholder="Organization name" class="username2"><br>
+                <input type="email" placeholder="email address" class="email2"><br>
+                <input type="number" placeholder="phone number" class="phone2">
+                <input type="text" placeholder="Address" class="address2"><br>
+
+                <input type="password" placeholder="password" class="password2"><br>
+            </div>
+            <p style="margin-top: -7px;color: rgb(235, 66, 66);opacity: 1;width: 100%;text-align: center;display: none;font-size: 15px;justify-content: center;align-items: center;margin-bottom: 15px;" class="err3">Organization name already exists</p>
+
+            <button onclick="checkSignupCharity()">Create a new account account</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="navbar" style="z-index: 150;">
+            <img src="{% static 'images/logo_1.png' %}" alt="" style="width: 130px;">
+            <div class="link">
+                <a style="cursor: pointer;">HOME</a>
+                <a onclick="about()" style="cursor: pointer;">ABOUT</a>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'donation' %}">DONATIONS</a>
+                {% endif %}
+                <a href="{% url 'blog' %}">BLOG</a>
+                {% if request.user.is_authenticated %}
+                
+                {% endif %}
+                <!-- <a href="">PAGES</a> -->
+                <!-- <a onclick="contact()" style="cursor: pointer;">CONTACT US</a> -->
+            </div>
+            <div class="icons">
+                <h2 style="opacity: 0;pointer-events: none;"><ion-icon name="bag-handle-outline"></ion-icon></h2>
+                <h2 style="opacity: 0;pointer-events: none;"><ion-icon name="search-outline"></ion-icon></h2>
+            </div>
+            {% if not request.user.is_authenticated %}
+            <!-- <button style="background-color: #e8e8e8;color: black;" >Login</button> -->
+            <button onclick="showLogin()" style="margin-left: -80px;">Login</button>
+            {% else %}
+            <a href="{% url 'logout' %}"><button style="background-color: #e8e8e8;color: black;">Logout</button></a>
+
+            {% endif %}
+        </div>
+        <div class="banner">
+            <div class="banner-details">
+                <h2>GIVE YOUR HAND</h2>
+                <h1>TO HELP OTHERS</h1>
+                <h5 style="margin-top: 15px;"><ion-icon name="arrow-down-outline"></ion-icon></h5>
+                <h6>SCROLL DOWN</h6>
+            </div>
+            <img src="{% static 'images/hero-bg-thumb-2.png' %}" alt="" >
+        </div>
+        <div class="section1">
+            <div class="buttons">
+                <button class="btn1">POSTIVIE COMMENTS : {{positive}}</button>
+                <button class="btn1">NEUTRAL COMMENTS : {{neutral}}</button>
+                <button class="btn1">NEGATIVE COMMENTS : {{negative}}</button>
+            </div>
+            <div class="heading">
+                <div class="line"></div>
+                <h1>DONATE FOR INDIAN CHILD</h1>
+                <div class="line"></div>
+            </div>
+            <div class="section1-heading">
+                <h1>28,0000</h1>
+                <div class="progressing">
+                    <div class="progress">
+                        <div class="in">
+                        </div>
+                    </div>
+                    <div class="circle">
+                        <div class="in-circle"></div>
+                    </div>
+                </div> 
+                <div class="cards">
+                    <div class="cards11">
+                        <div class="cards1">
+                            <img style="margin-bottom: 15px;" src="{% static 'images/feature-icon-1.svg' %}" alt="">
+                            <h3>Empower a Child's Future</h3>
+                            <p>Your donation changes lives. We provide education, healthcare, and essentials to underprivileged children in India. Together, we build brighter futures</p>
+                            <h5><ion-icon name="ellipse"></ion-icon>&nbsp<ion-icon name="ellipse"></ion-icon>&nbsp<ion-icon name="ellipse"></ion-icon></h5>
+                        </div>
+                    </div>    
+                    <div class="cards11">
+                        <div class="cards1">
+                            <img style="margin-bottom: 15px;" src="{% static 'images/feature-icon-2.svg' %}" alt="">
+                            <h3>A Hand for the Homeless</h3>
+                            <p>Every contribution matters. Your donation provides shelter, meals, and vital support to the homeless. Join us in making a difference</p>
+                            <h5><ion-icon name="ellipse"></ion-icon>&nbsp<ion-icon name="ellipse"></ion-icon>&nbsp<ion-icon name="ellipse"></ion-icon></h5>
+                        </div>
+                    </div>    
+                    <div class="cards11">
+                        <div class="cards1">
+                            <img style="margin-bottom: 15px;" src="{% static 'images/feature-icon-3.svg' %}" alt="">
+                            <h3>Healing Hearts, Changing Lives</h3>
+                            <p>Your generosity heals wounds. We support survivors with counseling, housing, and empowerment. Join us in being a beacon of hope</p>
+                            <h5><ion-icon name="ellipse"></ion-icon>&nbsp<ion-icon name="ellipse"></ion-icon>&nbsp<ion-icon name="ellipse"></ion-icon></h5>
+                        </div>
+                    </div>    
+                </div>   
+            </div>
+        </div>
+        <div class="section2">
+            <div class="section2-deatils">
+                <div class="about about-scroll">
+                    <h6><ion-icon name="heart"></ion-icon></h6>
+                    <h5>ABOUT FOUNDATION</h5>
+                </div>
+                <div class="detailss">
+                    <h1>WHAT HAVE WE DONE WITH YOUR HELP</h1>
+                    <p>Our Foundation is dedicated to creating positive change in the lives of those in need. With your support, we've provided education, healthcare, and essential resources to underprivileged children in India, offered shelter and vital support services to the homeless, and aided survivors of trauma and abuse in rebuilding their lives. Together, we've made a tangible impact, touching countless lives and inspiring hope. Join us in our commitment to making a difference.</p>
+                    <!-- <h4>join our Action and everyone can help</h4> -->
+                </div>
+                {% if request.user.is_autenticated %}
+                <div class="section2-btns">
+                    <a href="{% url 'donation' %}" style="cursor: pointer;"><button class="btn3" style="cursor: pointer;">DONATE NOW</button></a>
+                    <button class="btn4" style="opacity: 0;">BECAME A VOLUNTEER</button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="image-write">
+                <img src="{% static 'images/charityhome.jpeg' %}" alt="">
+            </div>
+        </div>
+        
+    </div>
+    <center>
+
+    {% if request.user.is_authenticated %}
+    <p style="font-size: 35px; font-weight: 700; margin-bottom: 5px;">Feedbacks</p>
+            <p style="font-size: 16px; font-weight: 500;margin-bottom: 15px; color: grey; text-align: center;">Below are the list of complaints</p>
+            <!-- <hr class="designelement1"> -->
+            <form action="{% url 'addFeed' %}" style="margin-top: 25px;" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Enter feedback" name="comment" required style="padding: 10px;background-color: white;border: 2px solid rgb(231, 231, 231);border-radius: 10px;font-weight: 600;width: 400px;outline: none;margin-right: 15px;">
+                <button style="padding: 10px;background-color: white;border: 2px solid rgb(231, 231, 231);border-radius: 10px;font-weight: 600;width: 150px;outline: none;margin-right: 15px;background-color: rgb(44, 107, 44);color: white;">Post Feedback</button>
+            </form>
+            <table style="margin-top: 25px;margin-bottom: 25px;">
+                <tr style="text-align: center;background-color: rgb(240, 240, 240);" >
+    
+                    <th style="width: 210px;padding: 8px;">Username</th>
+                    <th style="width: 250px;padding: 8px;">Date</th>
+                    
+                    <th style="width: 350px;padding: 8px;">Feedback</th>
+                    <th style="width: 350px;padding: 8px;">Sentiment</th>
+                    
+                    
+                    
+                </tr>
+                {% for f in feeds %}
+                
+                    <tr>
+                        <td style="text-align: center;padding: 10px;font-weight: 600;">{{ f.user.username }}</td>
+                        <td style="text-align: center;padding: 10px;font-weight: 600;">{{ f.date }}</td>
+                        
+                        <td style="text-align: center;padding: 10px;font-weight: 600;">{{ f.comment }}</td>
+                        <td style="text-align: center;padding: 10px;font-weight: 600;">{{ f.sentiment }}</td>
+                    
+                    
+                    </tr>
+                
+                {% endfor %}
+                
+            </table>
+        </center>
+        {% endif %}
+    <footer style="display: flex;justify-content: center;align-items: center;gap: 35px;color: white;background-color: #161616;height: 65px;" class="contact">
+        <h3><ion-icon name="logo-facebook"></ion-icon></h3>
+        <h3><ion-icon name="logo-twitter"></ion-icon></h3>
+        <h3><ion-icon name="logo-instagram"></ion-icon></h3>
+    </footer>
+    </body>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>   
+    <script src="{% static 'js/index.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+<script>
+  function sendData(){
+      
+      var data = new FormData()
+
+      data.append("username", document.querySelector('.userName').value)
+      data.append("password", document.querySelector('.password').value)
+      data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+      
+      $.ajax({
+
+          method:"POST",
+          url:'/checkLogin/',
+          processData:false,
+          contentType:false,
+          // MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+              localStorage.setItem("message",res.message)
+
+              if(res.message === 0){
+                  
+                  login(data)
+                  localStorage.setItem("username",document.querySelector('.userName').value)
+                  localStorage.setItem('password',document.querySelector('.password').value)
+                  // location.reload();
+                  
+              }
+              else{
+                  document.querySelector('.error').style.display = "flex"
+                  
+              }
+              
+
+          }
+      })
+  }
+
+  function login(data){
+
+
+      $.ajax({
+
+          method:"POST",
+          url:'/login/',
+          processData:false,
+          contentType:false,
+          MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+              console.log("it worked :)")
+              
+              setTimeout(()=>{
+
+                  location.reload();
+              },1000)
+          }
+          })
+  }
+
+  function signup(data){
+      console.log("888888888");
+      $.ajax({
+
+          method:"POST",
+          url:'/register/',
+          processData:false,
+          contentType:false,
+          MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+              
+              setTimeout(()=>{
+
+                  location.reload();
+
+              },1000)
+          }
+          })
+
+  }
+
+  function signup1(data){
+      console.log("888888888");
+      $.ajax({
+
+          method:"POST",
+          url:'/registercharity/',
+          processData:false,
+          contentType:false,
+          MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+              
+              setTimeout(()=>{
+
+                  location.reload();
+
+              },1000)
+          }
+          })
+
+  }
+
+  function checkSignup() {
+    var data = new FormData();
+
+    data.append("username", document.querySelector('.username1').value);
+    data.append("email", document.querySelector('.email1').value);
+    data.append("password", document.querySelector('.password1').value);
+    data.append("phone", document.querySelector('.phone').value);
+    data.append("address", document.querySelector('.address').value);
+    console.log($("input[id^='file']")[0].files[0]);
+    data.append("file", $("input[id^='file']")[0].files[0]);
+    data.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+    data.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+
+    $.ajax({
+        method: "POST",
+        url: '/checkSignup/',
+        processData: false,
+        contentType: false,
+        data: data,
+        success: function(res) {
+            if (res.message === 0) {
+                var error = 0; // Initialize error flag
+                
+                // Email validation
+                var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                if (!document.querySelector('.email1').value.match(validRegex)) {
+                    alert("Invalid email address!");
+                    error = 1;
+                }
+
+                // Username validation
+                if (document.querySelector('.username1').value === "") {
+                    alert("Please enter a valid username!");
+                    error = 1;
+                }
+
+                // Phone number validation
+                var phoneLength = document.querySelector('.phone').value.toString().length;
+                if (phoneLength !== 10) {
+                    alert("Please enter a 10 digit phone number!");
+                    error = 1;
+                }
+
+                // Address validation
+                if (document.querySelector('.address').value === "") {
+                    alert("Please enter your address!");
+                    error = 1;
+                }
+
+                // Password validation
+                var password = document.querySelector('.password1').value;
+                if (password === "") {
+                    alert("Please fill the password!");
+                    error = 1;
+                } else if (password.length < 7) {
+                    alert("Password length must be greater than 7!");
+                    error = 1;
+                } else if (!(/[A-Z]/.test(password))) {
+                    alert("Password must contain at least one capital letter!");
+                    error = 1;
+                } else if (!(/\d/.test(password))) {
+                    alert("Password must contain at least one number!");
+                    error = 1;
+                }
+
+                // Profile pic validation
+                if (document.querySelector('.file').value === "") {
+                    alert("Please choose a profile pic!");
+                    error = 1;
+                }
+
+                // If there are no errors, proceed with signup
+                if (error === 0) {
+                    signup(data);
+                }
+
+            } else {
+                document.querySelector('.err2').style.display = "flex";
+            }
+        }
+    });
+}
+
+
+
+function checkSignupCharity() {
+    var data = new FormData();
+
+    data.append("username", document.querySelector('.username2').value);
+    data.append("email", document.querySelector('.email2').value);
+    data.append("password", document.querySelector('.password2').value);
+    data.append("phone", document.querySelector('.phone2').value);
+    data.append("address", document.querySelector('.address2').value);
+    console.log($("input[id^='file1']")[0].files[0]);
+    data.append("file", $("input[id^='file1']")[0].files[0]);
+    data.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+    data.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+
+    $.ajax({
+        method: "POST",
+        url: '/checkSignup/',
+        processData: false,
+        contentType: false,
+        data: data,
+        success: function(res) {
+            if (res.message === 0) {
+                var error = 0; // Initialize error flag
+                
+                // Email validation
+                var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                if (!document.querySelector('.email2').value.match(validRegex)) {
+                    alert("Invalid email address!");
+                    error = 1;
+                }
+
+                // Username validation
+                if (document.querySelector('.username2').value === "") {
+                    alert("Please enter a valid username!");
+                    error = 1;
+                }
+
+                // Phone number validation
+                var phoneLength = document.querySelector('.phone2').value.toString().length;
+                if (phoneLength !== 10) {
+                    alert("Please enter a 10 digit phone number!");
+                    error = 1;
+                }
+
+                // Address validation
+                if (document.querySelector('.address2').value === "") {
+                    alert("Please enter your address!");
+                    error = 1;
+                }
+
+                // Password validation
+                var password = document.querySelector('.password2').value;
+                if (password === "") {
+                    alert("Please fill the password!");
+                    error = 1;
+                } else if (password.length < 7) {
+                    alert("Password length must be greater than 7!");
+                    error = 1;
+                } else if (!/[A-Z]/.test(password) || !/\d/.test(password)) {
+                    alert("Password must contain at least one capital letter and one number!");
+                    error = 1;
+                }
+
+                // Profile pic validation
+                if (document.querySelector('.file1').value === "") {
+                    alert("Please choose a profile pic!");
+                    error = 1;
+                }
+
+                // If there are no errors, proceed with signup
+                if (error === 0) {
+                    signup1(data);
+                }
+
+            } else {
+                document.querySelector('.err3').style.display = "flex";
+            }
+        }
+    });
+}
+
+
+  function about(){
+    document.querySelector('.about-scroll').scrollIntoView()
+  }
+
+  function contact(){
+    document.querySelector('.contact').scrollIntoView()
+  }
+
+  </script>
+
+   
+</body>
+</html>
